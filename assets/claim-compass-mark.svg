@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Claim Compass mark</title>
+  <desc id="desc">A compass needle inside a circular shield shape.</desc>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#218792"/>
+      <stop offset="1" stop-color="#102f4f"/>
+    </linearGradient>
+  </defs>
+  <circle cx="32" cy="32" r="29" fill="url(#g)"/>
+  <circle cx="32" cy="32" r="21" fill="none" stroke="#fff" stroke-opacity=".78" stroke-width="2"/>
+  <path d="M40.8 19.2 35.5 35.5 19.2 40.8l5.3-16.3z" fill="#fff"/>
+  <path d="m40.8 19.2-16.3 5.3 11 11z" fill="#d1a33b"/>
+  <circle cx="32" cy="32" r="3.1" fill="#102f4f" stroke="#fff" stroke-width="1.5"/>
+</svg>

@@ -1,0 +1,9 @@
+{
+  "name": "Claim Compass Organization Demo",
+  "short_name": "Claim Compass",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#102f4f",
+  "icons": []
+}

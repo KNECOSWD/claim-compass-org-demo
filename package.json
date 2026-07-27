@@ -1,0 +1,14 @@
+{
+  "name": "claim-compass-org-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Claim Compass concept site for accredited veterans organizations.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "test": "python tools/validate_site.py"
+  },
+  "license": "UNLICENSED"
+}
