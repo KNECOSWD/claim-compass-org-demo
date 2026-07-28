@@ -61,6 +61,9 @@ def main() -> None:
         'id="contact-form"': "live contact form",
         'action="/api/contact"': "contact API action",
         'claimcompass@kneco.com': "public contact mailbox",
+        'name="legalConsent"': "affirmative legal consent",
+        'href="terms.html"': "Terms of Use link",
+        'href="privacy.html"': "Privacy Notice link",
         'content="index, follow"': "public robots metadata",
         'rel="canonical" href="https://claimcompass-demo.kneco.com/"': "canonical URL",
     }
@@ -79,6 +82,25 @@ def main() -> None:
     if found:
         fail(f"Pre-public placeholder language remains: {', '.join(found)}")
 
+    for legal_page, title in (("terms.html", "Terms of Use"), ("privacy.html", "Privacy Notice")):
+        legal_path = ROOT / legal_page
+        if not legal_path.exists():
+            fail(f"{legal_page} is missing")
+        legal_html = legal_path.read_text(encoding="utf-8")
+        legal_parser = SiteParser()
+        legal_parser.feed(legal_html)
+        if title not in legal_html or not legal_parser.title_seen:
+            fail(f"{legal_page} does not contain the expected title")
+        duplicates = sorted({item for item in legal_parser.ids if legal_parser.ids.count(item) > 1})
+        if duplicates:
+            fail(f"Duplicate HTML IDs in {legal_page}: {', '.join(duplicates)}")
+        for reference in legal_parser.references:
+            if reference.startswith(("http://", "https://", "mailto:", "#", "data:")):
+                continue
+            reference_path = reference.split("?", 1)[0].split("#", 1)[0]
+            if not (ROOT / reference_path).exists():
+                fail(f"Missing referenced asset in {legal_page}: {reference}")
+
     with (ROOT / "staticwebapp.config.json").open(encoding="utf-8") as handle:
         json.load(handle)
 
@@ -95,7 +117,7 @@ def main() -> None:
         fail("Contact-form client submission is missing")
 
     server = (ROOT / "server.js").read_text(encoding="utf-8")
-    for needle in ("/api/contact", "CONTACT_EMAIL_CONNECTION_STRING", "CONTACT_EMAIL_SENDER"):
+    for needle in ("/api/contact", "CONTACT_EMAIL_CONNECTION_STRING", "CONTACT_EMAIL_SENDER", "legalConsent"):
         if needle not in server:
             fail(f"Contact API contract is missing {needle}")
 
@@ -103,8 +125,13 @@ def main() -> None:
     if "Disallow: /" in robots or "Allow: /" not in robots:
         fail("robots.txt is not configured for the live public site")
 
-    if not (ROOT / "sitemap.xml").exists():
+    sitemap_path = ROOT / "sitemap.xml"
+    if not sitemap_path.exists():
         fail("sitemap.xml is missing")
+    sitemap = sitemap_path.read_text(encoding="utf-8")
+    for url in ("https://claimcompass-demo.kneco.com/terms.html", "https://claimcompass-demo.kneco.com/privacy.html"):
+        if url not in sitemap:
+            fail(f"sitemap.xml is missing {url}")
 
     print("Public site validation passed.")
 

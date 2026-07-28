@@ -1,43 +1,34 @@
-# Release Notes — Public Contact Form Update 1.1.0
+# Release Notes — Legal Protection Update 1.2.0
 
 ## Purpose
 
-Replace the pre-public discussion-request placeholder with a live organizational contact form and align the demonstration site with its active Azure custom-domain deployment.
+Add clear, proportionate legal protections for KNECO, Inc. without overwhelming the public organizational demonstration.
 
 ## Changed
 
-- Replaced the discussion-request button with a responsive contact form.
-- Added server-side `POST /api/contact` handling.
-- Added Azure Communication Services Email delivery to `claimcompass@kneco.com`.
-- Added reply-to routing to the submitting contact.
-- Added required-field validation, field-length limits, a honeypot, and basic IP rate limiting.
-- Added direct-email fallback when delivery is unavailable.
-- Removed pre-public contact-routing language.
-- Replaced `noindex` and the blocking `robots.txt` rule with public indexing settings.
-- Added canonical metadata and `sitemap.xml` for the live custom domain.
-- Updated the footer and site banner to reflect the live organizational demonstration.
-- Updated documentation and automated validation.
+- Added a public Terms of Use page.
+- Added a public Privacy Notice describing contact-form and technical-data handling.
+- Added footer links to both notices.
+- Added affirmative contact-form agreement to the Terms of Use and acknowledgment of the Privacy Notice.
+- Added server-side validation of legal consent.
+- Clarified that contact submissions are introductory, non-confidential business inquiries and do not create representation, a pilot, partnership, or contract.
+- Clarified that features are illustrative and may change.
+- Clarified AI limitations and the requirement for source verification and professional judgment.
+- Clarified that any pilot, licensing, data-processing, or service relationship requires a separate signed agreement.
+- Expanded the concise VA-independence and no-advice footer notice.
+- Added legal pages to the public sitemap.
+- Updated automated validation to prevent removal of core legal protections.
 
-## Data boundary
+## Legal boundaries addressed
 
-- The public form is for organizational business contact only.
-- It must not be used to submit veteran names, Social Security numbers, claim numbers, medical information, or other sensitive personal information.
-- The application sends submissions by email and does not include a contact database.
-- The public demonstration still does not accept claim-file uploads.
+- No affiliation, sponsorship, endorsement, or operation by the U.S. Department of Veterans Affairs.
+- No legal, medical, benefits, or professional advice.
+- No attorney-client, accredited-representative, fiduciary, agency, partnership, or contractual relationship through site use or contact.
+- No submission of veteran records, claimant identifiers, health information, privileged material, or other sensitive data.
+- No reliance on AI-assisted output without source review and independent professional judgment.
+- No product, pilot, licensing, availability, performance, or outcome guarantee.
+- Intellectual-property, acceptable-use, warranty, liability, indemnification, Texas-law, and venue provisions placed on the Terms page rather than the main landing page.
 
-## Required Azure settings
+## Counsel review items
 
-- `CONTACT_EMAIL_CONNECTION_STRING`
-- `CONTACT_EMAIL_SENDER`
-- `CONTACT_EMAIL_RECIPIENT=claimcompass@kneco.com`
-
-See `CONTACT-FORM-AZURE-SETUP.md`.
-
-## Validation
-
-- HTML parsing and duplicate-ID validation
-- Internal asset-reference validation
-- Public search-indexing checks
-- Contact-form and `/api/contact` contract checks
-- JavaScript syntax checks for `script.js` and `server.js`
-- Required fictional demo dataset checks
+Before entering a real pilot or accepting veteran records, KNECO should use a separately signed pilot or subscription agreement that addresses data roles, security, confidentiality, permitted use, retention, incident response, insurance, intellectual property, service levels, payment, and termination. The public-site terms are not a substitute for that agreement.

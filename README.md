@@ -14,9 +14,11 @@ The site is hosted on Azure App Service and deployed from GitHub Actions.
 - Interactive fictional condition lifecycle
 - Fictional source-page preview
 - Organization-focused pilot and workflow language
-- Live organizational contact form
+- Live organizational contact form with affirmative Terms of Use and Privacy Notice consent
 - Server-side input validation, honeypot protection, and basic per-IP rate limiting
 - Azure Communication Services Email delivery to `claimcompass@kneco.com`
+- Public `terms.html` and `privacy.html` pages
+- Concise no-advice, no-VA-affiliation, fictional-data, and no-contract notices
 - Direct-email fallback
 - No veteran-record upload control
 - Azure App Service Node.js host with security headers and `/healthz`
@@ -34,6 +36,7 @@ The site is hosted on Azure App Service and deployed from GitHub Actions.
 ├── CONTACT-FORM-AZURE-SETUP.md
 ├── CNAME
 ├── index.html
+├── privacy.html
 ├── package.json
 ├── README.md
 ├── robots.txt
@@ -41,6 +44,7 @@ The site is hosted on Azure App Service and deployed from GitHub Actions.
 ├── server.js
 ├── sitemap.xml
 ├── staticwebapp.config.json
+├── terms.html
 └── styles.css
 ```
 
@@ -117,7 +121,8 @@ The validation checks confirm that the public contact form, contact API, search-
 - Keep all demonstration case data fictional.
 - Do not add a real claim-file upload control to this public site.
 - Keep public claims about features aligned with the currently demonstrable product.
-- Review privacy, accessibility, security, and legal language when the form or collected fields change.
+- Review privacy, accessibility, security, and legal language when the form, collected fields, service providers, analytics, or product capabilities change.
+- Do not represent illustrative functionality as a contractual commitment; pilots and licensing require a separately signed agreement.
 - Confirm that `claimcompass@kneco.com` remains the public routing mailbox.
 
 ## Mock data

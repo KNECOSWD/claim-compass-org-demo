@@ -152,7 +152,8 @@ function validateContactPayload(payload) {
     interest: normalizeText(payload.interest, 80),
     message: normalizeMessage(payload.message, 1500),
     website: normalizeText(payload.website, 200),
-    safeContent: payload.safeContent === 'on' || payload.safeContent === true || payload.safeContent === 'true'
+    safeContent: payload.safeContent === 'on' || payload.safeContent === true || payload.safeContent === 'true',
+    legalConsent: payload.legalConsent === 'on' || payload.legalConsent === true || payload.legalConsent === 'true'
   };
 
   if (contact.website) {
@@ -169,6 +170,10 @@ function validateContactPayload(payload) {
 
   if (!contact.safeContent) {
     return { ok: false, message: 'Please confirm that the request contains no sensitive veteran information.', contact };
+  }
+
+  if (!contact.legalConsent) {
+    return { ok: false, message: 'Please agree to the Terms of Use and acknowledge the Privacy Notice.', contact };
   }
 
   return { ok: true, contact };
@@ -212,7 +217,8 @@ async function sendContactEmail(contact) {
     'Message:',
     contact.message,
     '',
-    'The submitter confirmed that no sensitive veteran information was included.'
+    'The submitter confirmed that no sensitive veteran information was included.',
+    'The submitter agreed to the Terms of Use and acknowledged the Privacy Notice.'
   ].join('\n');
 
   const html = `
@@ -227,7 +233,7 @@ async function sendContactEmail(contact) {
     </table>
     <h3>Message</h3>
     <p style="white-space:pre-wrap">${escapeHtml(contact.message)}</p>
-    <p><em>The submitter confirmed that no sensitive veteran information was included.</em></p>`;
+    <p><em>The submitter confirmed that no sensitive veteran information was included and agreed to the Terms of Use and Privacy Notice.</em></p>`;
 
   const emailMessage = {
     senderAddress,

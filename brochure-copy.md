@@ -12,7 +12,7 @@ Explore the live Claim Compass organizational demonstration and see how structur
 
 **claimcompass-demo.kneco.com**
 
-The demonstration uses fictional information and does not accept veteran records.
+The demonstration uses fictional information and does not accept veteran records or sensitive personal information. Features shown are illustrative and subject to change.
 
 ## Contact KNECO
 
@@ -23,4 +23,4 @@ Veteran-Owned Technology Company
 
 ## Important Notice
 
-Claim Compass is an independent technology concept developed by KNECO, Inc. It is not affiliated with, endorsed by, or operated by the U.S. Department of Veterans Affairs. Claim Compass does not provide legal or medical advice, make claim determinations, or guarantee entitlement to benefits. AI-assisted findings must be reviewed and verified against the original source records by an authorized user.
+Claim Compass is an independent KNECO, Inc. platform. It is not affiliated with, endorsed by, sponsored by, or operated by the U.S. Department of Veterans Affairs. Claim Compass does not provide legal, medical, or benefits advice; establish representation; make claim determinations; or guarantee product availability, accuracy, ratings, or outcomes. AI-assisted findings may be incomplete or inaccurate and must be reviewed against the original source records by an appropriately authorized professional. Any pilot or licensing relationship requires a separate written agreement.
