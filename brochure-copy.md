@@ -19,8 +19,7 @@ The demonstration uses fictional information and does not accept veteran records
 **KNECO, Inc.**  
 Veteran-Owned Technology Company
 
-[Insert business email]  
-[Insert business phone]
+**claimcompass@kneco.com**
 
 ## Important Notice
 

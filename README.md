@@ -106,15 +106,15 @@ See `APP-SERVICE-DEPLOYMENT-GUIDE.md` for the complete click-by-click process.
 ## Before making the site publicly discoverable
 
 - Replace the trial banner and `noindex` setting only when the concept is ready for broader publication.
-- Connect the discussion call to action to an approved KNECO email address or contact workflow.
+- Confirm that `claimcompass@kneco.com` remains the approved public contact address before broader publication.
 - Review privacy, security, accessibility, and legal language.
 - Decide whether a public privacy statement and terms page are required.
 - Confirm that all claims about planned capabilities match the currently demonstrable product.
 - Do not add real veteran records to this static site.
 
-## Contact-button behavior
+## Contact-link behavior
 
-The **Copy discussion request** button copies a draft outreach message. It does not transmit or store data. This prevents the trial site from collecting contact information before a production contact workflow is approved.
+The **claimcompass@kneco.com** call to action opens the visitor’s default email application with a prefilled subject and organizational-discussion template. The demonstration site does not submit, transmit, or store form data.
 
 ## Mock data
 

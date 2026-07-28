@@ -151,17 +151,4 @@ nav.querySelectorAll("a").forEach((link) => {
   });
 });
 
-const discussionRequest = `Hello KNECO,\n\nOur organization would like to discuss the Claim Compass concept and learn more about a potential demonstration or controlled pilot.\n\nOrganization:\nPrimary contact:\nAccreditation/role context:\nApproximate number of reviewers:\nPrimary workflow challenge:\n\nThank you.`;
-
-const copyButton = document.querySelector("#copy-contact-button");
-const copyStatus = document.querySelector("#copy-status");
-copyButton.addEventListener("click", async () => {
-  try {
-    await navigator.clipboard.writeText(discussionRequest);
-    copyStatus.textContent = "Discussion request copied to your clipboard.";
-  } catch {
-    copyStatus.textContent = "Copy was blocked. Select and copy the request from the README template.";
-  }
-});
-
 renderCondition(activeCondition);
