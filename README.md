@@ -1,121 +1,125 @@
 # Claim Compass Accredited Organization Demo
 
-A standalone trial site that explains the Claim Compass concept to VA-recognized veterans organizations, accredited VSO representatives, accredited attorneys, claims agents, and other authorized veteran-service stakeholders.
+A live organizational demonstration site for VA-recognized veterans organizations, accredited VSO representatives, accredited attorneys, claims agents, and other authorized veteran-service stakeholders.
 
-## Intended public address
+## Public address
 
 `https://claimcompass-demo.kneco.com`
 
-The included `CNAME` file supports GitHub Pages. The same hostname can also be mapped to Azure App Service or Azure Static Web Apps.
+The site is hosted on Azure App Service and deployed from GitHub Actions.
 
 ## What this repository includes
 
-- Responsive single-page marketing site
-- Interactive mock condition lifecycle
+- Responsive single-page public site
+- Interactive fictional condition lifecycle
 - Fictional source-page preview
-- Accredited-organization-focused language
-- No upload control, authentication, analytics, cookies, or data collection
-- Explicit concept-preview and non-affiliation notices
-- Azure App Service Node.js host with security headers and a health endpoint
-- Azure Static Web Apps security configuration
-- GitHub Pages custom-domain file
-- Brochure-ready URL and revised call-to-action copy
+- Organization-focused pilot and workflow language
+- Live organizational contact form
+- Server-side input validation, honeypot protection, and basic per-IP rate limiting
+- Azure Communication Services Email delivery to `claimcompass@kneco.com`
+- Direct-email fallback
+- No veteran-record upload control
+- Azure App Service Node.js host with security headers and `/healthz`
+- Public indexing through `robots.txt`, canonical metadata, and `sitemap.xml`
+- Static validation and GitHub Actions checks
 
 ## Repository structure
 
 ```text
 .
+├── .github/workflows/
 ├── assets/
-│   ├── claim-compass-mark.svg
-│   ├── favicon.svg
-│   └── social-preview.svg
-├── .gitignore
-├── CNAME
+├── tools/
 ├── APP-SERVICE-DEPLOYMENT-GUIDE.md
-├── LICENSE
-├── README.md
-├── brochure-copy.md
+├── CONTACT-FORM-AZURE-SETUP.md
+├── CNAME
 ├── index.html
 ├── package.json
+├── README.md
 ├── robots.txt
 ├── script.js
 ├── server.js
+├── sitemap.xml
 ├── staticwebapp.config.json
 └── styles.css
 ```
 
 ## Run locally
 
-No build step is required.
-
-### Python
+Install dependencies and start the Node host:
 
 ```powershell
-python -m http.server 8080
-```
-
-Open `http://localhost:8080`.
-
-### Node
-
-```powershell
+npm install
 npm start
 ```
 
 Open `http://localhost:8080`.
 
+The public pages and `/healthz` work locally. Contact-form delivery requires the environment variables listed below.
+
+## Contact-form configuration
+
+The App Service must have these application settings:
+
+| Setting | Purpose |
+|---|---|
+| `CONTACT_EMAIL_CONNECTION_STRING` | Connection string from the Azure Communication Services resource |
+| `CONTACT_EMAIL_SENDER` | Sender address from the connected Azure Communication Services Email domain |
+| `CONTACT_EMAIL_RECIPIENT` | Destination mailbox; use `claimcompass@kneco.com` |
+
+See `CONTACT-FORM-AZURE-SETUP.md` for the click-by-click Azure setup.
+
+If email delivery is temporarily unavailable, the form displays an error and directs the visitor to email `claimcompass@kneco.com` directly.
+
+## Contact-form data handling
+
+The form accepts business-contact information only. Submissions are sent by email to `claimcompass@kneco.com`; this repository does not include a contact database. The form explicitly instructs visitors not to submit veteran names, Social Security numbers, claim numbers, medical information, or other sensitive personal information.
+
+The current implementation includes:
+
+- Required-field and email-format validation
+- Field-length limits
+- A hidden honeypot field
+- A five-submissions-per-hour in-memory IP limit
+- No message-body logging
+- Reply-to routing to the submitting contact
+- Azure Communication Services user-engagement tracking disabled for each message
+
+The in-memory rate limit is appropriate for the current single-instance demonstration. Replace it with a shared store or gateway-level protection before scaling to multiple instances.
 
 ## Deploy to Azure App Service
-
-This repository includes `package.json` and `server.js` so it can run directly on a Linux Azure App Service using Node.js 24 LTS. The server uses the `PORT` environment variable supplied by App Service and exposes `/healthz` for a basic health check.
 
 Recommended configuration:
 
 - Publish: Code
-- Runtime stack: Node 24 LTS
+- Runtime: Node 24 LTS
 - Operating system: Linux
-- Pricing plan: Basic B1 or higher when using a custom domain and App Service managed certificate
-- Deployment: GitHub Actions through App Service Deployment Center
+- App Service plan: Basic B1 or higher
+- Deployment: GitHub Actions from `main`
+- HTTPS Only: On
+- Custom domain: `claimcompass-demo.kneco.com`
 
-See `APP-SERVICE-DEPLOYMENT-GUIDE.md` for the complete click-by-click process.
+See `APP-SERVICE-DEPLOYMENT-GUIDE.md` for the deployment workflow.
 
-## Deploy to Azure Static Web Apps
+## Validation
 
-1. Create a new GitHub repository, such as `claim-compass-org-demo`.
-2. Copy all repository files into the repository root and push to the default branch.
-3. In Azure, create a new **Static Web App** linked to that GitHub repository.
-4. Choose **Custom** as the build preset.
-5. Set the app location to `/`.
-6. Leave the API location blank.
-7. Leave the output location blank.
-8. After deployment, add `claimcompass-demo.kneco.com` under **Custom domains**.
-9. Create the DNS record Azure requests. For a subdomain, this is normally a CNAME to the Azure Static Web Apps hostname.
-10. Confirm the custom-domain validation and managed TLS certificate.
+Run:
 
-## Deploy to GitHub Pages
+```powershell
+npm test
+npm run check
+```
 
-1. Create a repository and push these files to the default branch.
-2. Open **Settings → Pages**.
-3. Under **Build and deployment**, select **Deploy from a branch**.
-4. Select the default branch and `/ (root)`.
-5. Save.
-6. Configure the DNS CNAME record for `claimcompass-demo.kneco.com` to point to the GitHub Pages hostname shown in repository settings.
-7. Keep the included `CNAME` file in the repository root.
-8. Enable **Enforce HTTPS** after the certificate is ready.
+The validation checks confirm that the public contact form, contact API, search-engine settings, fictional demo datasets, referenced assets, and JavaScript syntax remain present.
 
-## Before making the site publicly discoverable
+## Public-site operating notes
 
-- Replace the trial banner and `noindex` setting only when the concept is ready for broader publication.
-- Confirm that `claimcompass@kneco.com` remains the approved public contact address before broader publication.
-- Review privacy, security, accessibility, and legal language.
-- Decide whether a public privacy statement and terms page are required.
-- Confirm that all claims about planned capabilities match the currently demonstrable product.
-- Do not add real veteran records to this static site.
-
-## Contact-link behavior
-
-The **claimcompass@kneco.com** call to action opens the visitor’s default email application with a prefilled subject and organizational-discussion template. The demonstration site does not submit, transmit, or store form data.
+- Keep all demonstration case data fictional.
+- Do not add a real claim-file upload control to this public site.
+- Keep public claims about features aligned with the currently demonstrable product.
+- Review privacy, accessibility, security, and legal language when the form or collected fields change.
+- Confirm that `claimcompass@kneco.com` remains the public routing mailbox.
 
 ## Mock data
 
-All case identifiers, dates, events, diagnoses, source pages, and findings are fictional. They are provided only to demonstrate interface concepts.
+All case identifiers, dates, events, diagnoses, source pages, and findings are fictional. They exist only to demonstrate Claim Compass interface and workflow concepts.

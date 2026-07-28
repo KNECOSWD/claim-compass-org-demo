@@ -1,4 +1,4 @@
-name: Static checks
+name: Site checks
 
 on:
   push:
@@ -19,5 +19,7 @@ jobs:
           python-version: "3.12"
       - name: Validate site files
         run: python tools/validate_site.py
-      - name: Check JavaScript syntax
+      - name: Check browser JavaScript syntax
         run: node --check script.js
+      - name: Check server JavaScript syntax
+        run: node --check server.js

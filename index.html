@@ -3,12 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Claim Compass is an AI-assisted claim-file review concept for VA-recognized veterans organizations and accredited representatives." />
+  <meta name="description" content="Claim Compass is an AI-assisted claim-file review platform for VA-recognized veterans organizations and accredited representatives." />
   <meta name="theme-color" content="#102f4f" />
-  <meta name="robots" content="noindex, nofollow" />
-  <meta property="og:title" content="Claim Compass | Organization Demo" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://claimcompass-demo.kneco.com/" />
+  <meta property="og:title" content="Claim Compass | Accredited Organization Demo" />
   <meta property="og:description" content="See how Claim Compass can help accredited veterans organizations turn complex claim files into structured, review-ready evidence." />
   <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://claimcompass-demo.kneco.com/" />
   <meta property="og:image" content="assets/social-preview.png" />
   <title>Claim Compass | Accredited Organization Demo</title>
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
@@ -19,8 +21,8 @@
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
 
-  <div class="trial-banner" role="status">
-    <strong>Concept preview:</strong> This site uses fictional data and does not accept veteran records.
+  <div class="live-banner" role="status">
+    <strong>Live organizational demonstration:</strong> This site uses fictional data and does not accept veteran records.
   </div>
 
   <header class="site-header" id="top">
@@ -45,7 +47,7 @@
         <a href="#workflow">Workflow</a>
         <a href="#preview">Product preview</a>
         <a href="#pilot">Pilot model</a>
-        <a class="button button-small" href="#contact">Request a discussion</a>
+        <a class="button button-small" href="#contact">Contact Claim Compass</a>
       </nav>
     </div>
   </header>
@@ -61,7 +63,7 @@
             condition-focused evidence views, and traceable findings for human verification.
           </p>
           <div class="hero-actions">
-            <a class="button" href="#preview">Explore the concept</a>
+            <a class="button" href="#preview">Explore the demonstration</a>
             <a class="button button-secondary" href="#pilot">View the pilot model</a>
           </div>
           <ul class="trust-list" aria-label="Core design principles">
@@ -344,18 +346,76 @@
 
     <section id="contact" class="section contact-section">
       <div class="container contact-card">
-        <div>
-          <p class="eyebrow">Start a conversation</p>
+        <div class="contact-intro">
+          <p class="eyebrow">Contact Claim Compass</p>
           <h2>Could Claim Compass strengthen your organization’s review workflow?</h2>
           <p>
-            KNECO, Inc. is seeking VA-recognized veterans organizations and accredited professionals willing to provide stakeholder feedback,
-            evaluate the concept, or discuss a controlled pilot.
+            Request a demonstration, stakeholder discussion, or controlled-pilot conversation with KNECO, Inc.
+            This form is intended for VA-recognized veterans organizations, accredited representatives, attorneys, claims agents,
+            and authorized veteran-service stakeholders.
           </p>
+          <div class="contact-direct">
+            <strong>Prefer email?</strong>
+            <a href="mailto:claimcompass@kneco.com">claimcompass@kneco.com</a>
+          </div>
         </div>
-        <div class="contact-actions">
-          <a class="button" href="mailto:claimcompass@kneco.com?subject=Claim%20Compass%20Organizational%20Discussion&amp;body=Hello%20Claim%20Compass%20team%2C%0D%0A%0D%0AOur%20organization%20would%20like%20to%20discuss%20the%20Claim%20Compass%20concept%20and%20a%20potential%20demonstration%20or%20controlled%20pilot.%0D%0A%0D%0AOrganization%3A%0D%0APrimary%20contact%3A%0D%0AAccreditation%2Frole%20context%3A%0D%0AApproximate%20number%20of%20reviewers%3A%0D%0APrimary%20workflow%20challenge%3A">claimcompass@kneco.com</a>
-          <small>Email Claim Compass to request an organizational discussion or controlled-pilot demonstration. No form data is collected by this site.</small>
-        </div>
+
+        <form id="contact-form" class="contact-form" action="/api/contact" method="post" novalidate>
+          <div class="form-grid">
+            <div class="form-field form-field-wide">
+              <label for="organization">Organization name <span aria-hidden="true">*</span></label>
+              <input id="organization" name="organization" type="text" maxlength="120" autocomplete="organization" required />
+            </div>
+
+            <div class="form-field">
+              <label for="contact-name">Your name <span aria-hidden="true">*</span></label>
+              <input id="contact-name" name="name" type="text" maxlength="100" autocomplete="name" required />
+            </div>
+
+            <div class="form-field">
+              <label for="contact-email">Work email <span aria-hidden="true">*</span></label>
+              <input id="contact-email" name="email" type="email" maxlength="160" autocomplete="email" inputmode="email" required />
+            </div>
+
+            <div class="form-field">
+              <label for="role">Role or accreditation context</label>
+              <input id="role" name="role" type="text" maxlength="120" autocomplete="organization-title" placeholder="VSO representative, attorney, program director…" />
+            </div>
+
+            <div class="form-field">
+              <label for="interest">Primary interest <span aria-hidden="true">*</span></label>
+              <select id="interest" name="interest" required>
+                <option value="">Select one</option>
+                <option value="Demonstration">Product demonstration</option>
+                <option value="Pilot discussion">Controlled pilot discussion</option>
+                <option value="Stakeholder feedback">Stakeholder feedback</option>
+                <option value="Organizational licensing">Organizational licensing</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-field form-field-wide">
+              <label for="message">How can we help? <span aria-hidden="true">*</span></label>
+              <textarea id="message" name="message" rows="5" maxlength="1500" required placeholder="Tell us about your organization, current review workflow, and what you would like to evaluate."></textarea>
+            </div>
+
+            <div class="form-honeypot" aria-hidden="true">
+              <label for="website">Website</label>
+              <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+            </div>
+
+            <label class="form-confirmation form-field-wide" for="safe-content">
+              <input id="safe-content" name="safeContent" type="checkbox" required />
+              <span>I understand that I should not include veteran names, Social Security numbers, claim numbers, medical information, or other sensitive personal information in this form.</span>
+            </label>
+          </div>
+
+          <div class="form-actions">
+            <button id="contact-submit" class="button" type="submit">Send request</button>
+            <p id="contact-status" class="form-status" role="status" aria-live="polite"></p>
+          </div>
+          <p class="form-privacy">The information submitted here is emailed to <a href="mailto:claimcompass@kneco.com">claimcompass@kneco.com</a> for business follow-up. It is not added to a veteran claim file.</p>
+        </form>
       </div>
     </section>
   </main>
@@ -364,7 +424,7 @@
     <div class="container footer-grid">
       <div class="footer-brand">
         <img src="assets/claim-compass-mark.svg" alt="" width="38" height="38" />
-        <div><strong>Claim Compass</strong><span>A KNECO, Inc. product concept</span></div>
+        <div><strong>Claim Compass</strong><span>A KNECO, Inc. platform</span></div>
       </div>
       <div class="footer-notice">
         <p>
@@ -378,7 +438,7 @@
       </div>
       <div class="footer-meta">
         <a href="#top">Back to top</a>
-        <span>Fictional demonstration data only</span>
+        <span>Live organizational demo · Fictional data only</span>
       </div>
     </div>
   </footer>

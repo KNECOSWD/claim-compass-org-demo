@@ -26,7 +26,7 @@ Azure web-app names are globally unique. If `kneco-claim-compass-demo` is unavai
 3. Select **New repository**.
 4. Choose the appropriate owner, such as `KNECOSWD`.
 5. Enter `claim-compass-org-demo` for the repository name.
-6. Enter a description such as `Claim Compass concept site for accredited veterans organizations.`
+6. Enter a description such as `Claim Compass organizational demonstration for accredited veterans organizations.`
 7. Select **Private** for early pilot outreach.
 8. Do not initialize the repository with a README, `.gitignore`, or license because these files are already included.
 9. Select **Create repository**.
@@ -157,11 +157,12 @@ Create these records at the authoritative DNS host for `kneco.com`, not merely a
 2. Turn **HTTPS Only** on.
 3. Select **Save**.
 4. Open the custom URL again.
-5. Test the navigation, interactive mock timeline, source preview, mobile layout, and discussion-request copy button.
-6. Confirm no form accepts real veteran records.
-7. Keep the included `noindex` directive until KNECO is ready for search-engine discovery.
+5. Test the navigation, interactive mock timeline, source preview, mobile layout, and organizational contact form.
+6. Confirm the form sends a test request to `claimcompass@kneco.com`.
+7. Confirm the public site continues to reject veteran-record uploads and warns visitors not to submit sensitive veteran information.
+8. Confirm `robots.txt` and `sitemap.xml` load through the custom domain.
 
-## 11. Future updates
+## 11. Ongoing updates
 
 1. Edit the code locally in the cloned repository.
 2. Review the changed files in GitHub Desktop.
@@ -170,3 +171,8 @@ Create these records at the authoritative DNS host for `kneco.com`, not merely a
 5. Select **Push origin**.
 6. GitHub Actions automatically deploys the new version to App Service.
 7. Confirm the workflow succeeds and test both the Azure default hostname and custom hostname.
+
+
+## 12. Configure the live contact form
+
+Follow `CONTACT-FORM-AZURE-SETUP.md` to create the Azure Communication Services Email resources and add the three required App Service environment variables.

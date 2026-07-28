@@ -152,3 +152,59 @@ nav.querySelectorAll("a").forEach((link) => {
 });
 
 renderCondition(activeCondition);
+
+const contactForm = document.querySelector("#contact-form");
+const contactSubmit = document.querySelector("#contact-submit");
+const contactStatus = document.querySelector("#contact-status");
+
+if (contactForm && contactSubmit && contactStatus) {
+  contactForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    contactStatus.className = "form-status";
+
+    if (!contactForm.checkValidity()) {
+      contactForm.reportValidity();
+      contactStatus.textContent = "Please complete the required fields before sending your request.";
+      contactStatus.classList.add("is-error");
+      return;
+    }
+
+    const formData = new FormData(contactForm);
+    const payload = Object.fromEntries(formData.entries());
+
+    contactSubmit.disabled = true;
+    contactSubmit.textContent = "Sending…";
+    contactForm.setAttribute("aria-busy", "true");
+    contactStatus.textContent = "Sending your request securely…";
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      let result = {};
+      try {
+        result = await response.json();
+      } catch {
+        result = {};
+      }
+
+      if (!response.ok) {
+        throw new Error(result.message || "Your request could not be sent right now.");
+      }
+
+      contactForm.reset();
+      contactStatus.textContent = result.message || "Thank you. Your request was sent to the Claim Compass team.";
+      contactStatus.classList.add("is-success");
+    } catch (error) {
+      contactStatus.textContent = `${error.message} You can also email claimcompass@kneco.com directly.`;
+      contactStatus.classList.add("is-error");
+    } finally {
+      contactSubmit.disabled = false;
+      contactSubmit.textContent = "Send request";
+      contactForm.removeAttribute("aria-busy");
+    }
+  });
+}

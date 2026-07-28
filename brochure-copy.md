@@ -1,6 +1,6 @@
 # Brochure URL and call to action
 
-Use this temporary concept-demonstration address in the brochure:
+Use this live organizational-demonstration address in the brochure:
 
 **claimcompass-demo.kneco.com**
 
@@ -8,7 +8,7 @@ Recommended back-panel wording:
 
 ## Request an Organizational Demonstration
 
-Explore the Claim Compass concept and see how structured timelines, condition-focused evidence views, and source-page traceability could support your accredited representatives.
+Explore the live Claim Compass organizational demonstration and see how structured timelines, condition-focused evidence views, and source-page traceability can support representative review workflows.
 
 **claimcompass-demo.kneco.com**
 
