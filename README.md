@@ -128,3 +128,11 @@ The validation checks confirm that the public contact form, contact API, search-
 ## Mock data
 
 All case identifiers, dates, events, diagnoses, source pages, and findings are fictional. They exist only to demonstrate Claim Compass interface and workflow concepts.
+
+## Brand assets
+
+The website uses the supplied canonical Claim Compass logo family. Use `assets/claim-compass-logo-mark.svg` on light backgrounds and `assets/claim-compass-logo-mark-header.svg` on dark backgrounds. Browser icons are stored at the repository root.
+
+## Contact form validation
+
+The browser provides field-level validation and the `/api/contact` endpoint repeats all material checks server-side. The server whitelists the interest selection, validates optional organization URLs, blocks likely Social Security-number patterns in the message, requires both acknowledgments, rate-limits submissions, and silently accepts the hidden bot-trap field.

@@ -11,6 +11,14 @@ const maxContactBodyBytes = 20 * 1024;
 const contactRateWindowMs = 60 * 60 * 1000;
 const contactRateLimit = 5;
 const contactAttempts = new Map();
+const allowedInterests = new Set([
+  'Demonstration',
+  'Pilot discussion',
+  'Stakeholder feedback',
+  'Organizational licensing',
+  'Other'
+]);
+const sensitiveIdentifierPattern = /\b\d{3}[ -]?\d{2}[ -]?\d{4}\b/;
 
 const mimeTypes = {
   '.css': 'text/css; charset=utf-8',
@@ -57,7 +65,7 @@ function sendFile(res, filePath) {
     res.setHeader('Content-Length', stats.size);
     res.setHeader(
       'Cache-Control',
-      extension === '.html' ? 'no-cache' : 'public, max-age=86400'
+      ['.html', '.css', '.js'].includes(extension) ? 'no-cache, must-revalidate' : 'public, max-age=604800'
     );
     res.writeHead(200);
 
@@ -143,37 +151,74 @@ function readJsonBody(req) {
   });
 }
 
+function isMeaningfulText(value) {
+  return /[\p{L}\p{N}]/u.test(value);
+}
+
+function isValidWebsite(value) {
+  if (!value) return true;
+  try {
+    const parsed = new URL(value);
+    return (parsed.protocol === 'https:' || parsed.protocol === 'http:') && Boolean(parsed.hostname);
+  } catch {
+    return false;
+  }
+}
+
 function validateContactPayload(payload) {
+  const raw = payload && typeof payload === 'object' ? payload : {};
   const contact = {
-    organization: normalizeText(payload.organization, 120),
-    name: normalizeText(payload.name, 100),
-    email: normalizeText(payload.email, 160).toLowerCase(),
-    role: normalizeText(payload.role, 120),
-    interest: normalizeText(payload.interest, 80),
-    message: normalizeMessage(payload.message, 1500),
-    website: normalizeText(payload.website, 200),
-    safeContent: payload.safeContent === 'on' || payload.safeContent === true || payload.safeContent === 'true',
-    legalConsent: payload.legalConsent === 'on' || payload.legalConsent === true || payload.legalConsent === 'true'
+    organization: normalizeText(raw.organization, 120),
+    name: normalizeText(raw.name, 100),
+    email: normalizeText(raw.email, 160).toLowerCase(),
+    role: normalizeText(raw.role, 120),
+    organizationWebsite: normalizeText(raw.organizationWebsite, 240),
+    interest: normalizeText(raw.interest, 80),
+    message: normalizeMessage(raw.message, 1500),
+    companyFax: normalizeText(raw.companyFax, 200),
+    safeContent: raw.safeContent === 'on' || raw.safeContent === true || raw.safeContent === 'true',
+    legalConsent: raw.legalConsent === 'on' || raw.legalConsent === true || raw.legalConsent === 'true',
+    formStartedAt: Number.parseInt(String(raw.formStartedAt || ''), 10),
+    formVersion: normalizeText(raw.formVersion, 40)
   };
 
-  if (contact.website) {
+  if (contact.companyFax) {
     return { ok: false, silent: true, contact };
   }
 
-  if (!contact.organization || !contact.name || !contact.interest || !contact.message) {
-    return { ok: false, message: 'Please complete all required fields.', contact };
+  const errors = {};
+  if (contact.organization.length < 2 || !isMeaningfulText(contact.organization)) {
+    errors.organization = 'Enter a valid organization name.';
   }
-
+  if (contact.name.length < 2 || !isMeaningfulText(contact.name)) {
+    errors.name = 'Enter your name.';
+  }
   if (!isValidEmail(contact.email)) {
-    return { ok: false, message: 'Please enter a valid work email address.', contact };
+    errors.email = 'Enter a valid email address.';
   }
-
+  if (contact.role && contact.role.length < 2) {
+    errors.role = 'Enter at least 2 characters or leave this field blank.';
+  }
+  if (!isValidWebsite(contact.organizationWebsite)) {
+    errors.organizationWebsite = 'Enter a complete website address beginning with https://.';
+  }
+  if (!allowedInterests.has(contact.interest)) {
+    errors.interest = 'Select one of the available interests.';
+  }
+  if (contact.message.length < 30) {
+    errors.message = 'Provide at least 30 characters so we can understand your request.';
+  } else if (sensitiveIdentifierPattern.test(contact.message)) {
+    errors.message = 'Remove any Social Security number or similar nine-digit personal identifier.';
+  }
   if (!contact.safeContent) {
-    return { ok: false, message: 'Please confirm that the request contains no sensitive veteran information.', contact };
+    errors.safeContent = 'Confirm that the request contains no sensitive veteran information.';
+  }
+  if (!contact.legalConsent) {
+    errors.legalConsent = 'Agree to the Terms of Use and acknowledge the Privacy Notice.';
   }
 
-  if (!contact.legalConsent) {
-    return { ok: false, message: 'Please agree to the Terms of Use and acknowledge the Privacy Notice.', contact };
+  if (Object.keys(errors).length) {
+    return { ok: false, message: 'Please correct the highlighted fields.', errors, contact };
   }
 
   return { ok: true, contact };
@@ -211,8 +256,10 @@ async function sendContactEmail(contact) {
     `Contact: ${contact.name}`,
     `Email: ${contact.email}`,
     `Role/accreditation context: ${contact.role || 'Not provided'}`,
+    `Organization website: ${contact.organizationWebsite || 'Not provided'}`,
     `Primary interest: ${contact.interest}`,
     `Submitted: ${submittedAt}`,
+    `Form version: ${contact.formVersion || 'Not provided'}`,
     '',
     'Message:',
     contact.message,
@@ -228,8 +275,10 @@ async function sendContactEmail(contact) {
       <tr><th align="left">Contact</th><td>${escapeHtml(contact.name)}</td></tr>
       <tr><th align="left">Email</th><td>${escapeHtml(contact.email)}</td></tr>
       <tr><th align="left">Role/accreditation context</th><td>${escapeHtml(contact.role || 'Not provided')}</td></tr>
+      <tr><th align="left">Organization website</th><td>${escapeHtml(contact.organizationWebsite || 'Not provided')}</td></tr>
       <tr><th align="left">Primary interest</th><td>${escapeHtml(contact.interest)}</td></tr>
       <tr><th align="left">Submitted</th><td>${escapeHtml(submittedAt)}</td></tr>
+      <tr><th align="left">Form version</th><td>${escapeHtml(contact.formVersion || 'Not provided')}</td></tr>
     </table>
     <h3>Message</h3>
     <p style="white-space:pre-wrap">${escapeHtml(contact.message)}</p>
@@ -285,7 +334,7 @@ async function handleContactRequest(req, res) {
     }
 
     if (!validation.ok) {
-      sendJson(res, 400, { message: validation.message });
+      sendJson(res, 400, { message: validation.message, errors: validation.errors || {} });
       return;
     }
 

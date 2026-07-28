@@ -1,9 +1,22 @@
 {
-  "name": "Claim Compass Organization Demo",
+  "name": "Claim Compass Organizational Demo",
   "short_name": "Claim Compass",
+  "description": "AI-assisted claim-file review demonstration for accredited veterans organizations.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#102f4f",
-  "icons": []
+  "theme_color": "#0d1b2a",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
 }

@@ -156,15 +156,133 @@ renderCondition(activeCondition);
 const contactForm = document.querySelector("#contact-form");
 const contactSubmit = document.querySelector("#contact-submit");
 const contactStatus = document.querySelector("#contact-status");
+const messageField = document.querySelector("#message");
+const messageCount = document.querySelector("#message-count");
+const formStartedAt = document.querySelector("#form-started-at");
+
+const allowedInterests = new Set([
+  "Demonstration",
+  "Pilot discussion",
+  "Stakeholder feedback",
+  "Organizational licensing",
+  "Other",
+]);
+
+const sensitiveIdentifierPattern = /\b\d{3}[ -]?\d{2}[ -]?\d{4}\b/;
+const meaningfulTextPattern = /[\p{L}\p{N}]/u;
+
+function setFormStartTime() {
+  if (formStartedAt) formStartedAt.value = String(Date.now());
+}
+
+function updateMessageCount() {
+  if (messageField && messageCount) {
+    messageCount.textContent = `${messageField.value.length} / 1500`;
+  }
+}
+
+function fieldErrorElement(field) {
+  const describedBy = (field.getAttribute("aria-describedby") || "").split(/\s+/);
+  const errorId = describedBy.find((id) => id.endsWith("-error"));
+  return errorId ? document.getElementById(errorId) : null;
+}
+
+function setFieldError(field, message = "") {
+  const error = fieldErrorElement(field);
+  field.classList.toggle("is-invalid", Boolean(message));
+  field.setAttribute("aria-invalid", message ? "true" : "false");
+  if (error) error.textContent = message;
+
+  if (field.type === "checkbox") {
+    field.closest(".form-confirmation")?.classList.toggle("is-invalid", Boolean(message));
+  }
+}
+
+function normalized(value) {
+  return value.replace(/\s+/g, " ").trim();
+}
+
+function validateField(field) {
+  const value = normalized(field.value || "");
+  let message = "";
+
+  if (field.required && field.type === "checkbox" && !field.checked) {
+    message = field.id === "safe-content"
+      ? "Confirm that you will not submit sensitive veteran information."
+      : "Agree to the Terms of Use and acknowledge the Privacy Notice.";
+  } else if (field.required && !value) {
+    message = "This field is required.";
+  } else if (field.id === "organization" && value && (value.length < 2 || !meaningfulTextPattern.test(value))) {
+    message = "Enter a valid organization name.";
+  } else if (field.id === "contact-name" && value && (value.length < 2 || !meaningfulTextPattern.test(value))) {
+    message = "Enter your name.";
+  } else if (field.id === "contact-email" && value && !field.validity.valid) {
+    message = "Enter a valid email address, such as name@organization.org.";
+  } else if (field.id === "role" && value && value.length < 2) {
+    message = "Enter at least 2 characters or leave this field blank.";
+  } else if (field.id === "organization-website" && value) {
+    try {
+      const url = new URL(value);
+      if (!["http:", "https:"].includes(url.protocol)) throw new Error("invalid protocol");
+    } catch {
+      message = "Enter a complete website address beginning with https://.";
+    }
+  } else if (field.id === "interest" && value && !allowedInterests.has(value)) {
+    message = "Select one of the available interests.";
+  } else if (field.id === "message" && value) {
+    if (value.length < 30) {
+      message = "Provide at least 30 characters so we can understand your request.";
+    } else if (sensitiveIdentifierPattern.test(value)) {
+      message = "Remove any Social Security number or similar nine-digit personal identifier.";
+    }
+  }
+
+  if (!message && field.validity.tooLong) message = `Use no more than ${field.maxLength} characters.`;
+  if (!message && field.validity.tooShort) message = `Use at least ${field.minLength} characters.`;
+
+  setFieldError(field, message);
+  return !message;
+}
+
+function validateContactForm() {
+  const fields = [
+    "organization", "contact-name", "contact-email", "role", "organization-website",
+    "interest", "message", "safe-content", "legal-consent",
+  ].map((id) => document.getElementById(id)).filter(Boolean);
+
+  let valid = true;
+  let firstInvalid = null;
+  fields.forEach((field) => {
+    const fieldValid = validateField(field);
+    if (!fieldValid && !firstInvalid) firstInvalid = field;
+    valid = fieldValid && valid;
+  });
+
+  firstInvalid?.focus();
+  return valid;
+}
 
 if (contactForm && contactSubmit && contactStatus) {
+  setFormStartTime();
+  updateMessageCount();
+
+  contactForm.querySelectorAll("input, select, textarea").forEach((field) => {
+    if (field.type === "hidden" || field.name === "companyFax") return;
+    field.addEventListener("blur", () => validateField(field));
+    field.addEventListener(field.type === "checkbox" || field.tagName === "SELECT" ? "change" : "input", () => {
+      if (field.classList.contains("is-invalid") || field.getAttribute("aria-invalid") === "true") validateField(field);
+      if (field === messageField) updateMessageCount();
+    });
+  });
+
+  messageField?.addEventListener("input", updateMessageCount);
+
   contactForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     contactStatus.className = "form-status";
 
-    if (!contactForm.checkValidity()) {
-      contactForm.reportValidity();
-      contactStatus.textContent = "Please complete the required fields before sending your request.";
+    if (!validateContactForm()) {
+      contactStatus.textContent = "Please correct the highlighted fields before sending your request.";
       contactStatus.classList.add("is-error");
       return;
     }
@@ -192,10 +310,21 @@ if (contactForm && contactSubmit && contactStatus) {
       }
 
       if (!response.ok) {
+        if (result.errors && typeof result.errors === "object") {
+          Object.entries(result.errors).forEach(([fieldName, message]) => {
+            const field = contactForm.elements.namedItem(fieldName);
+            if (field instanceof HTMLElement) setFieldError(field, String(message));
+          });
+        }
         throw new Error(result.message || "Your request could not be sent right now.");
       }
 
       contactForm.reset();
+      contactForm.querySelectorAll(".is-invalid").forEach((element) => element.classList.remove("is-invalid"));
+      contactForm.querySelectorAll('[aria-invalid="true"]').forEach((element) => element.setAttribute("aria-invalid", "false"));
+      contactForm.querySelectorAll(".form-error").forEach((element) => { element.textContent = ""; });
+      setFormStartTime();
+      updateMessageCount();
       contactStatus.textContent = result.message || "Thank you. Your request was sent to the Claim Compass team.";
       contactStatus.classList.add("is-success");
     } catch (error) {
@@ -208,3 +337,4 @@ if (contactForm && contactSubmit && contactStatus) {
     }
   });
 }
+

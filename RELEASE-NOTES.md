@@ -1,3 +1,12 @@
+# Brand and Contact Form Update
+
+## Updated
+- Replaced website header, footer, browser, manifest, and social-preview logos with the supplied Claim Compass brand assets.
+- Added a responsive, accessible contact form layout with visible field guidance and field-level errors.
+- Added client- and server-side validation for required values, minimum lengths, email, website URL, approved interests, consent, and likely Social Security-number patterns.
+- Added a legitimate optional organization website field and moved the bot trap to a permanently hidden field.
+- Added cache revalidation for HTML, CSS, and JavaScript so live style changes are not masked by stale browser assets.
+
 # Release Notes — Legal Protection Update 1.2.0
 
 ## Purpose

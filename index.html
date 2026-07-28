@@ -11,12 +11,18 @@
   <meta property="og:description" content="See how Claim Compass can help accredited veterans organizations turn complex claim files into structured, review-ready evidence." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://claimcompass-demo.kneco.com/" />
-  <meta property="og:image" content="assets/social-preview.png" />
+  <meta property="og:image" content="https://claimcompass-demo.kneco.com/assets/social-preview.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
   <title>Claim Compass | Accredited Organization Demo</title>
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="icon" href="favicon.ico" sizes="any" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
   <link rel="manifest" href="site.webmanifest" />
-  <link rel="stylesheet" href="styles.css" />
-  <script src="script.js" defer></script>
+  <link rel="stylesheet" href="styles.css?v=20260728-3" />
+  <script src="script.js?v=20260728-3" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">Skip to main content</a>
@@ -28,7 +34,7 @@
   <header class="site-header" id="top">
     <div class="container header-inner">
       <a class="brand" href="#top" aria-label="Claim Compass home">
-        <img src="assets/claim-compass-mark.svg" alt="" width="46" height="46" />
+        <img src="assets/claim-compass-logo-mark.svg" alt="" width="46" height="46" />
         <span>
           <strong>Claim Compass</strong>
           <small>Accredited Organization Demo</small>
@@ -366,27 +372,40 @@
           <div class="form-grid">
             <div class="form-field form-field-wide">
               <label for="organization">Organization name <span aria-hidden="true">*</span></label>
-              <input id="organization" name="organization" type="text" maxlength="120" autocomplete="organization" required />
+              <input id="organization" name="organization" type="text" minlength="2" maxlength="120" autocomplete="organization" required aria-describedby="organization-hint organization-error" />
+              <span id="organization-hint" class="form-hint">Use the organization’s official or commonly recognized name.</span>
+              <span id="organization-error" class="form-error" aria-live="polite"></span>
             </div>
 
             <div class="form-field">
               <label for="contact-name">Your name <span aria-hidden="true">*</span></label>
-              <input id="contact-name" name="name" type="text" maxlength="100" autocomplete="name" required />
+              <input id="contact-name" name="name" type="text" minlength="2" maxlength="100" autocomplete="name" required aria-describedby="contact-name-error" />
+              <span id="contact-name-error" class="form-error" aria-live="polite"></span>
             </div>
 
             <div class="form-field">
               <label for="contact-email">Work email <span aria-hidden="true">*</span></label>
-              <input id="contact-email" name="email" type="email" maxlength="160" autocomplete="email" inputmode="email" required />
+              <input id="contact-email" name="email" type="email" maxlength="160" autocomplete="email" inputmode="email" required aria-describedby="contact-email-hint contact-email-error" />
+              <span id="contact-email-hint" class="form-hint">We use this only to respond to your inquiry.</span>
+              <span id="contact-email-error" class="form-error" aria-live="polite"></span>
             </div>
 
             <div class="form-field">
               <label for="role">Role or accreditation context</label>
-              <input id="role" name="role" type="text" maxlength="120" autocomplete="organization-title" placeholder="VSO representative, attorney, program director…" />
+              <input id="role" name="role" type="text" maxlength="120" autocomplete="organization-title" placeholder="VSO representative, attorney, program director…" aria-describedby="role-error" />
+              <span id="role-error" class="form-error" aria-live="polite"></span>
             </div>
 
             <div class="form-field">
+              <label for="organization-website">Organization website</label>
+              <input id="organization-website" name="organizationWebsite" type="url" maxlength="240" inputmode="url" autocomplete="url" placeholder="https://organization.org" aria-describedby="organization-website-hint organization-website-error" />
+              <span id="organization-website-hint" class="form-hint">Optional. Include the full address beginning with https://.</span>
+              <span id="organization-website-error" class="form-error" aria-live="polite"></span>
+            </div>
+
+            <div class="form-field form-field-wide">
               <label for="interest">Primary interest <span aria-hidden="true">*</span></label>
-              <select id="interest" name="interest" required>
+              <select id="interest" name="interest" required aria-describedby="interest-error">
                 <option value="">Select one</option>
                 <option value="Demonstration">Product demonstration</option>
                 <option value="Pilot discussion">Controlled pilot discussion</option>
@@ -394,27 +413,38 @@
                 <option value="Organizational licensing">Organizational licensing</option>
                 <option value="Other">Other</option>
               </select>
+              <span id="interest-error" class="form-error" aria-live="polite"></span>
             </div>
 
             <div class="form-field form-field-wide">
-              <label for="message">How can we help? <span aria-hidden="true">*</span></label>
-              <textarea id="message" name="message" rows="5" maxlength="1500" required placeholder="Tell us about your organization, current review workflow, and what you would like to evaluate."></textarea>
+              <div class="form-label-row">
+                <label for="message">How can we help? <span aria-hidden="true">*</span></label>
+                <span id="message-count" class="character-count" aria-live="polite">0 / 1500</span>
+              </div>
+              <textarea id="message" name="message" rows="6" minlength="30" maxlength="1500" required aria-describedby="message-hint message-error" placeholder="Tell us about your organization, current review workflow, and what you would like to evaluate."></textarea>
+              <span id="message-hint" class="form-hint">Please provide at least 30 characters and do not include veteran-specific or sensitive information.</span>
+              <span id="message-error" class="form-error" aria-live="polite"></span>
             </div>
 
-            <div class="form-honeypot" aria-hidden="true">
-              <label for="website">Website</label>
-              <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+            <div class="form-honeypot" hidden aria-hidden="true">
+              <label for="company-fax">Company fax</label>
+              <input id="company-fax" name="companyFax" type="text" tabindex="-1" autocomplete="off" />
             </div>
 
             <label class="form-confirmation form-field-wide" for="safe-content">
-              <input id="safe-content" name="safeContent" type="checkbox" required />
+              <input id="safe-content" name="safeContent" type="checkbox" required aria-describedby="safe-content-error" />
               <span>I will not include veteran names, Social Security numbers, claim numbers, medical information, privileged material, or other sensitive information in this form.</span>
             </label>
+            <span id="safe-content-error" class="form-error form-error-wide" aria-live="polite"></span>
 
             <label class="form-confirmation form-field-wide" for="legal-consent">
-              <input id="legal-consent" name="legalConsent" type="checkbox" required />
+              <input id="legal-consent" name="legalConsent" type="checkbox" required aria-describedby="legal-consent-error" />
               <span>I agree to the <a href="terms.html" target="_blank" rel="noopener">Terms of Use</a> and acknowledge the <a href="privacy.html" target="_blank" rel="noopener">Privacy Notice</a>. I understand that submitting this form does not create a confidential, representative, attorney-client, pilot, partnership, or contractual relationship.</span>
             </label>
+            <span id="legal-consent-error" class="form-error form-error-wide" aria-live="polite"></span>
+
+            <input id="form-started-at" name="formStartedAt" type="hidden" />
+            <input name="formVersion" type="hidden" value="2026-07-28.3" />
           </div>
 
           <div class="form-actions">
@@ -430,7 +460,7 @@
   <footer class="site-footer">
     <div class="container footer-grid">
       <div class="footer-brand">
-        <img src="assets/claim-compass-mark.svg" alt="" width="38" height="38" />
+        <img class="footer-logo" src="assets/claim-compass-logo-mark-header.svg" alt="" width="34" height="38" />
         <div><strong>Claim Compass</strong><span>A KNECO, Inc. platform</span></div>
       </div>
       <div class="footer-notice">

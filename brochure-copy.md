@@ -24,3 +24,6 @@ Veteran-Owned Technology Company
 ## Important Notice
 
 Claim Compass is an independent KNECO, Inc. platform. It is not affiliated with, endorsed by, sponsored by, or operated by the U.S. Department of Veterans Affairs. Claim Compass does not provide legal, medical, or benefits advice; establish representation; make claim determinations; or guarantee product availability, accuracy, ratings, or outcomes. AI-assisted findings may be incomplete or inaccurate and must be reviewed against the original source records by an appropriately authorized professional. Any pilot or licensing relationship requires a separate written agreement.
+
+
+**Brand asset:** Use the canonical Claim Compass compass-and-path mark supplied by KNECO.
