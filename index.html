@@ -391,15 +391,16 @@
             </div>
 
             <div class="form-field">
-              <label for="role">Role or accreditation context</label>
-              <input id="role" name="role" type="text" maxlength="120" autocomplete="organization-title" placeholder="VSO representative, attorney, program director…" aria-describedby="role-error" />
+              <label for="role">Role or Title</label>
+              <input id="role" name="role" type="text" maxlength="120" autocomplete="organization-title" placeholder="VSO representative, attorney, program director…" aria-describedby="role-hint role-error" />
+              <span id="role-hint" class="form-hint">Optional. Include your title, accreditation, or role with the organization.</span>
               <span id="role-error" class="form-error" aria-live="polite"></span>
             </div>
 
             <div class="form-field">
-              <label for="organization-website">Organization website</label>
-              <input id="organization-website" name="organizationWebsite" type="url" maxlength="240" inputmode="url" autocomplete="url" placeholder="https://organization.org" aria-describedby="organization-website-hint organization-website-error" />
-              <span id="organization-website-hint" class="form-hint">Optional. Include the full address beginning with https://.</span>
+              <label for="organization-website">Organization website (optional)</label>
+              <input id="organization-website" name="organizationWebsite" type="text" maxlength="240" inputmode="url" autocomplete="url" placeholder="organization.org" aria-describedby="organization-website-hint organization-website-error" />
+              <span id="organization-website-hint" class="form-hint">Enter a domain such as organization.org or paste the full web address. http:// and https:// are optional.</span>
               <span id="organization-website-error" class="form-error" aria-live="polite"></span>
             </div>
 
@@ -444,7 +445,7 @@
             <span id="legal-consent-error" class="form-error form-error-wide" aria-live="polite"></span>
 
             <input id="form-started-at" name="formStartedAt" type="hidden" />
-            <input name="formVersion" type="hidden" value="2026-07-28.3" />
+            <input name="formVersion" type="hidden" value="2026-07-28.4" />
           </div>
 
           <div class="form-actions">

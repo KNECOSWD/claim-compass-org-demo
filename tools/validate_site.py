@@ -63,6 +63,8 @@ def main() -> None:
         'claimcompass@kneco.com': "public contact mailbox",
         'name="legalConsent"': "affirmative legal consent",
         'name="organizationWebsite"': "organization website field",
+        'Role or Title': "clear role field label",
+        'http:// and https:// are optional': "scheme-optional website guidance",
         'name="companyFax"': "hidden bot-trap field",
         'minlength="30"': "minimum inquiry length",
         'claim-compass-logo-mark.svg': "canonical Claim Compass logo",
@@ -80,6 +82,9 @@ def main() -> None:
         "contact routing can be connected",
         "noindex, nofollow",
         "copy discussion request",
+        "role or accreditation context",
+        "your role or title",
+        "include the full address beginning with https://",
     }
     lowered = html.lower()
     found = sorted(text for text in forbidden_text if text in lowered)
@@ -128,9 +133,11 @@ def main() -> None:
         fail(f"Missing mock condition data: {', '.join(sorted(missing))}")
     if 'fetch("/api/contact"' not in script:
         fail("Contact-form client submission is missing")
+    if 'normalizeWebsiteValue' not in script:
+        fail("Scheme-optional website normalization is missing from the client")
 
     server = (ROOT / "server.js").read_text(encoding="utf-8")
-    for needle in ("/api/contact", "CONTACT_EMAIL_CONNECTION_STRING", "CONTACT_EMAIL_SENDER", "legalConsent", "organizationWebsite", "allowedInterests", "sensitiveIdentifierPattern"):
+    for needle in ("/api/contact", "CONTACT_EMAIL_CONNECTION_STRING", "CONTACT_EMAIL_SENDER", "legalConsent", "organizationWebsite", "normalizeWebsite", "allowedInterests", "sensitiveIdentifierPattern"):
         if needle not in server:
             fail(f"Contact API contract is missing {needle}")
 

@@ -1,3 +1,18 @@
+# Contact Form Label Correction 1.2.2
+
+## Updated
+- Changed the visible form label from “Your role or title” to the exact requested wording: “Role or Title.”
+- Updated contact-email output and automated validation to use the same wording.
+
+# Contact Form Clarity Update 1.2.1
+
+## Updated
+- Renamed “Role or accreditation context” to the clearer “Your role or title.”
+- Added optional guidance explaining that a title, accreditation, or organizational role may be entered.
+- Renamed and clarified the optional organization website field.
+- Accepts `organization.org`, `www.organization.org`, or full `http://` and `https://` addresses.
+- Normalizes scheme-free website entries to HTTPS before sending and repeats the validation server-side.
+
 # Brand and Contact Form Update
 
 ## Updated

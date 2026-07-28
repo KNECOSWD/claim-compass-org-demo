@@ -155,6 +155,14 @@ function isMeaningfulText(value) {
   return /[\p{L}\p{N}]/u.test(value);
 }
 
+function normalizeWebsite(value) {
+  const website = normalizeText(value, 240);
+  if (!website) return '';
+  if (/^[a-z][a-z0-9+.-]*:/i.test(website)) return website;
+  if (website.startsWith('//')) return `https:${website}`;
+  return `https://${website}`;
+}
+
 function isValidWebsite(value) {
   if (!value) return true;
   try {
@@ -172,7 +180,7 @@ function validateContactPayload(payload) {
     name: normalizeText(raw.name, 100),
     email: normalizeText(raw.email, 160).toLowerCase(),
     role: normalizeText(raw.role, 120),
-    organizationWebsite: normalizeText(raw.organizationWebsite, 240),
+    organizationWebsite: normalizeWebsite(raw.organizationWebsite),
     interest: normalizeText(raw.interest, 80),
     message: normalizeMessage(raw.message, 1500),
     companyFax: normalizeText(raw.companyFax, 200),
@@ -200,7 +208,7 @@ function validateContactPayload(payload) {
     errors.role = 'Enter at least 2 characters or leave this field blank.';
   }
   if (!isValidWebsite(contact.organizationWebsite)) {
-    errors.organizationWebsite = 'Enter a complete website address beginning with https://.';
+    errors.organizationWebsite = 'Enter a website such as organization.org or https://organization.org.';
   }
   if (!allowedInterests.has(contact.interest)) {
     errors.interest = 'Select one of the available interests.';
@@ -255,7 +263,7 @@ async function sendContactEmail(contact) {
     `Organization: ${contact.organization}`,
     `Contact: ${contact.name}`,
     `Email: ${contact.email}`,
-    `Role/accreditation context: ${contact.role || 'Not provided'}`,
+    `Role or Title: ${contact.role || 'Not provided'}`,
     `Organization website: ${contact.organizationWebsite || 'Not provided'}`,
     `Primary interest: ${contact.interest}`,
     `Submitted: ${submittedAt}`,
@@ -274,7 +282,7 @@ async function sendContactEmail(contact) {
       <tr><th align="left">Organization</th><td>${escapeHtml(contact.organization)}</td></tr>
       <tr><th align="left">Contact</th><td>${escapeHtml(contact.name)}</td></tr>
       <tr><th align="left">Email</th><td>${escapeHtml(contact.email)}</td></tr>
-      <tr><th align="left">Role/accreditation context</th><td>${escapeHtml(contact.role || 'Not provided')}</td></tr>
+      <tr><th align="left">Role or Title</th><td>${escapeHtml(contact.role || 'Not provided')}</td></tr>
       <tr><th align="left">Organization website</th><td>${escapeHtml(contact.organizationWebsite || 'Not provided')}</td></tr>
       <tr><th align="left">Primary interest</th><td>${escapeHtml(contact.interest)}</td></tr>
       <tr><th align="left">Submitted</th><td>${escapeHtml(submittedAt)}</td></tr>
