@@ -62,6 +62,10 @@ def main() -> None:
         'action="/api/contact"': "contact API action",
         'claimcompass@kneco.com': "public contact mailbox",
         'name="legalConsent"': "affirmative legal consent",
+        'name="organizationWebsite"': "organization website field",
+        'name="companyFax"': "hidden bot-trap field",
+        'minlength="30"': "minimum inquiry length",
+        'claim-compass-logo-mark.svg': "canonical Claim Compass logo",
         'href="terms.html"': "Terms of Use link",
         'href="privacy.html"': "Privacy Notice link",
         'content="index, follow"': "public robots metadata",
@@ -101,6 +105,15 @@ def main() -> None:
             if not (ROOT / reference_path).exists():
                 fail(f"Missing referenced asset in {legal_page}: {reference}")
 
+
+    for asset in (
+        "favicon.ico", "favicon.svg", "favicon-16x16.png", "favicon-32x32.png",
+        "apple-touch-icon.png", "android-chrome-192x192.png", "android-chrome-512x512.png",
+        "assets/claim-compass-logo-mark.svg", "assets/claim-compass-logo-mark-header.svg",
+    ):
+        if not (ROOT / asset).exists():
+            fail(f"Required brand asset is missing: {asset}")
+
     with (ROOT / "staticwebapp.config.json").open(encoding="utf-8") as handle:
         json.load(handle)
 
@@ -117,7 +130,7 @@ def main() -> None:
         fail("Contact-form client submission is missing")
 
     server = (ROOT / "server.js").read_text(encoding="utf-8")
-    for needle in ("/api/contact", "CONTACT_EMAIL_CONNECTION_STRING", "CONTACT_EMAIL_SENDER", "legalConsent"):
+    for needle in ("/api/contact", "CONTACT_EMAIL_CONNECTION_STRING", "CONTACT_EMAIL_SENDER", "legalConsent", "organizationWebsite", "allowedInterests", "sensitiveIdentifierPattern"):
         if needle not in server:
             fail(f"Contact API contract is missing {needle}")
 
